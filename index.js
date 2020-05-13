@@ -16,6 +16,25 @@ NodeList.prototype.iterator = function () {
         args[0](this[i], i);
     return 1;
 };
+String.prototype.convertArr = function () {
+    var arr = [];
+    this.iterator(function (_this) {
+        arr.push(_this);
+    });
+    return arr;
+};
+Array.prototype.myPop = function () {
+    var arr = [];
+    for (var i = 0; i < this.length - 1; i++)
+        arr.push(this[i]);
+    return arr;
+};
+Array.prototype.convertStr = function () {
+    var str = "";
+    for (var i = 0; i < this.length; i++)
+        str += this[i];
+    return str;
+};
 var __math__ = {
     add: function () {
         var args = [];
@@ -87,12 +106,12 @@ var calcu = {
     input: document.querySelector("input"),
     restric: /([0-9]+[\x\-\/\%\^\+]{1}[0-9]+)/g,
     event: function (event) {
-        var _this = this;
+        var _this_1 = this;
         var num1 = "", num2 = "", opera = "", flag = true, test = true;
         this.btns.iterator(function (btn) {
             btn.addEventListener(event, function () {
-                if (btn.textContent === "=" && test && _this.input.value !== " ") {
-                    _this.input.value.iterator(function (val) {
+                if (btn.textContent === "=" && test && _this_1.input.value !== " ") {
+                    _this_1.input.value.iterator(function (val) {
                         if (val !== "+" &&
                             val !== "-" &&
                             val !== "x" &&
@@ -104,29 +123,29 @@ var calcu = {
                         else {
                             if (!flag)
                                 num2 += val;
-                            if (flag)
+                            else if (flag)
                                 opera = val;
                             flag = false;
                         }
                     });
                     switch (opera) {
                         case "+":
-                            _this.input.value = __math__.add(parseFloat(num1), parseFloat(num2));
+                            _this_1.input.value = __math__.add(parseFloat(num1), parseFloat(num2));
                             break;
                         case "-":
-                            _this.input.value = __math__.subtract(parseFloat(num1), parseFloat(num2));
+                            _this_1.input.value = __math__.subtract(parseFloat(num1), parseFloat(num2));
                             break;
                         case "x":
-                            _this.input.value = __math__.multiply(parseFloat(num1), parseFloat(num2));
+                            _this_1.input.value = __math__.multiply(parseFloat(num1), parseFloat(num2));
                             break;
                         case "/":
-                            _this.input.value = __math__.division(parseFloat(num1), parseFloat(num2));
+                            _this_1.input.value = __math__.division(parseFloat(num1), parseFloat(num2));
                             break;
                         case "^":
-                            _this.input.value = __math__.Potency(parseFloat(num1), parseFloat(num2));
+                            _this_1.input.value = __math__.Potency(parseFloat(num2), parseFloat(num1));
                             break;
                         case "%":
-                            _this.input.value = __math__.Rest(parseFloat(num1), parseFloat(num2));
+                            _this_1.input.value = __math__.Rest(parseFloat(num1), parseFloat(num2));
                             break;
                         default:
                             console.log("error de caracter");
@@ -136,13 +155,20 @@ var calcu = {
                     num1 = "";
                     num2 = "";
                 }
-                else if (btn.textContent !== "=") {
-                    _this.input.value += btn.textContent;
-                    test = _this.restric.test(_this.input.value);
+                else if (btn.textContent !== "=" &&
+                    btn.textContent !== "AC" &&
+                    btn.textContent !== "DE") {
+                    _this_1.input.value += btn.textContent;
+                    test = _this_1.restric.test(_this_1.input.value);
+                }
+                else if (btn.textContent === "AC") {
+                    _this_1.input.value = " ";
+                }
+                else if (btn.textContent === "DE") {
+                    _this_1.input.value = _this_1.input.value.convertArr().myPop().convertStr();
                 }
             });
         });
     }
 };
 calcu.event("click");
-console.log(calcu.input);

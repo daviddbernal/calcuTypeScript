@@ -28,6 +28,26 @@ NodeList.prototype.iterator = function (...args: [Function]) {
   return 1;
 };
 
+String.prototype.convertArr = function () {
+  let arr: any = [];
+  this.iterator((_this) => {
+    arr.push(_this);
+  });
+  return arr;
+};
+
+Array.prototype.myPop = function () {
+  let arr: any = [];
+  for (let i = 0; i < this.length - 1; i++) arr.push(this[i]);
+  return arr;
+};
+
+Array.prototype.convertStr = function () {
+  let str: any = "";
+  for (let i = 0; i < this.length; i++) str += this[i];
+  return str;
+};
+
 let __math__: math = {
   add: function (...args: [number, number]) {
     return args[0] + args[1];
@@ -85,7 +105,7 @@ let calcu: Tags = {
               num1 += val;
             else {
               if (!flag) num2 += val;
-              if (flag) opera = val;
+              else if (flag) opera = val;
               flag = false;
             }
           });
@@ -116,8 +136,8 @@ let calcu: Tags = {
               break;
             case "^":
               this.input.value = __math__.Potency(
-                parseFloat(num1),
-                parseFloat(num2)
+                parseFloat(num2),
+                parseFloat(num1)
               );
               break;
             case "%":
@@ -133,9 +153,17 @@ let calcu: Tags = {
           flag = true;
           num1 = "";
           num2 = "";
-        } else if (btn.textContent !== "=") {
+        } else if (
+          btn.textContent !== "=" &&
+          btn.textContent !== "AC" &&
+          btn.textContent !== "DE"
+        ) {
           this.input.value += btn.textContent;
           test = this.restric.test(this.input.value);
+        } else if (btn.textContent === "AC") {
+          this.input.value = " ";
+        } else if (btn.textContent === "DE") {
+          this.input.value = this.input.value.convertArr().myPop().convertStr();
         }
       });
     });
@@ -143,5 +171,3 @@ let calcu: Tags = {
 };
 
 calcu.event("click");
-
-console.log(calcu.input);
