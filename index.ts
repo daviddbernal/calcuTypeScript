@@ -88,9 +88,10 @@ let calcu: Tags = {
       num2: string = "",
       opera: string = "",
       flag = true,
-      test = false;
+      test = true;
     this.btns.iterator((btn) => {
       btn.addEventListener(event, () => {
+        if (btn.textContent === "=") test = this.restric.test(this.input.value);
         if (btn.textContent === "=" && test && this.input.value !== " ") {
           this.input.value.iterator((val) => {
             if (
@@ -160,7 +161,6 @@ let calcu: Tags = {
         ) {
           this.input.value +=
             btn.textContent !== "PI" ? btn.textContent : __math__.PY;
-          test = this.restric.test(this.input.value);
         } else if (btn.textContent === "AC") {
           this.input.value = " ";
         } else if (btn.textContent === "DE") {
