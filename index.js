@@ -158,7 +158,8 @@ var calcu = {
                 else if (btn.textContent !== "=" &&
                     btn.textContent !== "AC" &&
                     btn.textContent !== "DE") {
-                    _this_1.input.value += btn.textContent;
+                    _this_1.input.value +=
+                        btn.textContent !== "PI" ? btn.textContent : __math__.PY;
                     test = _this_1.restric.test(_this_1.input.value);
                 }
                 else if (btn.textContent === "AC") {

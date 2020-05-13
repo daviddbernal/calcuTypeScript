@@ -158,7 +158,8 @@ let calcu: Tags = {
           btn.textContent !== "AC" &&
           btn.textContent !== "DE"
         ) {
-          this.input.value += btn.textContent;
+          this.input.value +=
+            btn.textContent !== "PI" ? btn.textContent : __math__.PY;
           test = this.restric.test(this.input.value);
         } else if (btn.textContent === "AC") {
           this.input.value = " ";
