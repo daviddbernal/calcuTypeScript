@@ -89,11 +89,11 @@ let calcu: Tags = {
       opera: string = "",
       flag = true,
       test = true;
-    this.btns.iterator((btn) => {
+    this.btns.iterator((btn: Node) => {
       btn.addEventListener(event, () => {
-        if (btn.textContent === "=") test = this.restric.test(this.input.value);
+        test = this.restric.test(this.input.value);
         if (btn.textContent === "=" && test && this.input.value !== " ") {
-          this.input.value.iterator((val) => {
+          this.input.value.iterator((val: string) => {
             if (
               val !== "+" &&
               val !== "-" &&

@@ -110,8 +110,7 @@ var calcu = {
         var num1 = "", num2 = "", opera = "", flag = true, test = true;
         this.btns.iterator(function (btn) {
             btn.addEventListener(event, function () {
-                if (btn.textContent === "=")
-                    test = _this_1.restric.test(_this_1.input.value);
+                test = _this_1.restric.test(_this_1.input.value);
                 if (btn.textContent === "=" && test && _this_1.input.value !== " ") {
                     _this_1.input.value.iterator(function (val) {
                         if (val !== "+" &&
