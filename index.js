@@ -104,7 +104,7 @@ var __math__ = {
 var calcu = {
     btns: document.querySelectorAll("button"),
     input: document.querySelector("input"),
-    restric: /([0-9]+[\x\-\/\%\^\+]{1}[0-9]+)/g,
+    restric: /([0-9]*[\x\-\/\%\^\+]{1}[0-9]*)/g,
     event: function (event) {
         var _this_1 = this;
         var num1 = "", num2 = "", opera = "", flag = true, test = true;
@@ -161,6 +161,7 @@ var calcu = {
                     _this_1.input.value +=
                         btn.textContent !== "PI" ? btn.textContent : __math__.PY;
                     test = _this_1.restric.test(_this_1.input.value);
+                    console.log(test);
                 }
                 else if (btn.textContent === "AC") {
                     _this_1.input.value = " ";

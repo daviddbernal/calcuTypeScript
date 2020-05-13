@@ -82,7 +82,7 @@ let __math__: math = {
 let calcu: Tags = {
   btns: document.querySelectorAll("button"),
   input: document.querySelector("input"),
-  restric: /([0-9]+[\x\-\/\%\^\+]{1}[0-9]+)/g,
+  restric: /([0-9]*[\x\-\/\%\^\+]{1}[0-9]*)/g,
   event: function (event: string) {
     let num1: string = "",
       num2: string = "",
@@ -161,6 +161,7 @@ let calcu: Tags = {
           this.input.value +=
             btn.textContent !== "PI" ? btn.textContent : __math__.PY;
           test = this.restric.test(this.input.value);
+          console.log(test);
         } else if (btn.textContent === "AC") {
           this.input.value = " ";
         } else if (btn.textContent === "DE") {
