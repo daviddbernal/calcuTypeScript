@@ -1,41 +1,32 @@
-String.prototype.iterator = function () {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
+var utils1 = {
+    iteraStr: function (str, func) {
+        for (var i = 0; i < str.length; i++)
+            func(str[i], i);
+    },
+    iteraNodeList: function (nodeLs, func) {
+        for (var i = 0; i < nodeLs.length; i++)
+            func(nodeLs[i], i);
+    },
+    myPop: function (arr) {
+        var newArr = [];
+        for (var i = 0; i < arr.length - 1; i++)
+            newArr.push(arr[i]);
+        return newArr;
+    },
+    convertArr: function (str) {
+        var arr = [];
+        for (var i = 0; i < str.length; i++)
+            arr.push(str[i]);
+        return arr;
+    },
+    convertStr: function (arr) {
+        var str = " ";
+        for (var i = 0; i < arr.length; i++)
+            str += arr[i];
+        return str;
     }
-    for (var i = 0; i < this.length; i++)
-        args[0](this[i], i);
-    return 1;
 };
-NodeList.prototype.iterator = function () {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    for (var i = 0; i < this.length; i++)
-        args[0](this[i], i);
-    return 1;
-};
-String.prototype.convertArr = function () {
-    var arr = [];
-    this.iterator(function (_this) {
-        arr.push(_this);
-    });
-    return arr;
-};
-Array.prototype.myPop = function () {
-    var arr = [];
-    for (var i = 0; i < this.length - 1; i++)
-        arr.push(this[i]);
-    return arr;
-};
-Array.prototype.convertStr = function () {
-    var str = "";
-    for (var i = 0; i < this.length; i++)
-        str += this[i];
-    return str;
-};
-var __math__ = {
+var math1 = {
     add: function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -101,18 +92,18 @@ var __math__ = {
     },
     PY: Math.PI
 };
-var calcu = {
+var tags1 = {
     btns: document.querySelectorAll("button"),
     input: document.querySelector("input"),
     restric: /([0-9]{1,}(\.[0-9]{1,}){0,1}[\x\+\-\/\^\%]{1,1}[0-9]{1,}(\.[0-9]{1,}){0,1})$/g,
     event: function (event) {
-        var _this_1 = this;
+        var _this = this;
         var num1 = "", num2 = "", opera = "", flag = true, test = true;
-        this.btns.iterator(function (btn) {
+        utils1.iteraNodeList(this.btns, function (btn) {
             btn.addEventListener(event, function () {
-                test = _this_1.restric.test(_this_1.input.value);
-                if (btn.textContent === "=" && test && _this_1.input.value !== " ") {
-                    _this_1.input.value.iterator(function (val) {
+                test = _this.restric.test(_this.input.value);
+                if (btn.textContent === "=" && test && _this.input.value !== " ") {
+                    utils1.iteraStr(_this.input.value, function (val) {
                         if (val !== "+" &&
                             val !== "-" &&
                             val !== "x" &&
@@ -131,22 +122,22 @@ var calcu = {
                     });
                     switch (opera) {
                         case "+":
-                            _this_1.input.value = __math__.add(parseFloat(num1), parseFloat(num2));
+                            _this.input.value = math1.add(parseFloat(num1), parseFloat(num2));
                             break;
                         case "-":
-                            _this_1.input.value = __math__.subtract(parseFloat(num1), parseFloat(num2));
+                            _this.input.value = math1.subtract(parseFloat(num1), parseFloat(num2));
                             break;
                         case "x":
-                            _this_1.input.value = __math__.multiply(parseFloat(num1), parseFloat(num2));
+                            _this.input.value = math1.multiply(parseFloat(num1), parseFloat(num2));
                             break;
                         case "/":
-                            _this_1.input.value = __math__.division(parseFloat(num1), parseFloat(num2));
+                            _this.input.value = math1.division(parseFloat(num1), parseFloat(num2));
                             break;
                         case "^":
-                            _this_1.input.value = __math__.Potency(parseFloat(num2), parseFloat(num1));
+                            _this.input.value = math1.Potency(parseFloat(num2), parseFloat(num1));
                             break;
                         case "%":
-                            _this_1.input.value = __math__.Rest(parseFloat(num1), parseFloat(num2));
+                            _this.input.value = math1.Rest(parseFloat(num1), parseFloat(num2));
                             break;
                         default:
                             console.log("error de caracter");
@@ -158,18 +149,15 @@ var calcu = {
                 }
                 else if (btn.textContent !== "=" &&
                     btn.textContent !== "AC" &&
-                    btn.textContent !== "DE") {
-                    _this_1.input.value +=
-                        btn.textContent !== "PI" ? btn.textContent : __math__.PY;
-                }
-                else if (btn.textContent === "AC") {
-                    _this_1.input.value = " ";
-                }
-                else if (btn.textContent === "DE") {
-                    _this_1.input.value = _this_1.input.value.convertArr().myPop().convertStr();
-                }
+                    btn.textContent !== "DE")
+                    _this.input.value +=
+                        btn.textContent !== "PI" ? btn.textContent : math1.PY;
+                else if (btn.textContent === "AC")
+                    _this.input.value = " ";
+                else if (btn.textContent === "DE")
+                    _this.input.value = utils1.convertStr(utils1.myPop(utils1.convertArr(_this.input.value)));
             });
         });
     }
 };
-calcu.event("click");
+tags1.event("click");

@@ -18,37 +18,45 @@ type Tags = {
   event: Function;
 };
 
-String.prototype.iterator = function (...args: [Function]) {
-  for (let i = 0; i < this.length; i++) args[0](this[i], i);
-  return 1;
+type Utils = {
+  iteraStr: Function;
+  iteraNodeList: Function;
+  myPop: Function;
+  convertArr: Function;
+  convertStr: Function;
 };
 
-NodeList.prototype.iterator = function (...args: [Function]) {
-  for (let i = 0; i < this.length; i++) args[0](this[i], i);
-  return 1;
+let utils1: Utils = {
+  iteraStr: function (
+    str: string,
+    func: (str: string, index: number) => void
+  ): void {
+    for (let i: number = 0; i < str.length; i++) func(str[i], i);
+  },
+  iteraNodeList: function (
+    nodeLs: NodeList,
+    func: (node: Node, index: number) => void
+  ): void {
+    for (let i: number = 0; i < nodeLs.length; i++) func(nodeLs[i], i);
+  },
+  myPop: function (arr: Array<any>): Array<any> {
+    let newArr: Array<any> = [];
+    for (let i: number = 0; i < arr.length - 1; i++) newArr.push(arr[i]);
+    return newArr;
+  },
+  convertArr: function (str: String): Array<any> {
+    let arr: Array<any> = [];
+    for (let i: number = 0; i < str.length; i++) arr.push(str[i]);
+    return arr;
+  },
+  convertStr: function (arr: Array<any>): string {
+    let str: string = " ";
+    for (let i: number = 0; i < arr.length; i++) str += arr[i];
+    return str;
+  },
 };
 
-String.prototype.convertArr = function () {
-  let arr: any = [];
-  this.iterator((_this) => {
-    arr.push(_this);
-  });
-  return arr;
-};
-
-Array.prototype.myPop = function () {
-  let arr: any = [];
-  for (let i = 0; i < this.length - 1; i++) arr.push(this[i]);
-  return arr;
-};
-
-Array.prototype.convertStr = function () {
-  let str: any = "";
-  for (let i = 0; i < this.length; i++) str += this[i];
-  return str;
-};
-
-let __math__: math = {
+let math1: math = {
   add: function (...args: [number, number]) {
     return args[0] + args[1];
   },
@@ -79,7 +87,7 @@ let __math__: math = {
   PY: Math.PI,
 };
 
-let calcu: Tags = {
+let tags1: Tags = {
   btns: document.querySelectorAll("button"),
   input: document.querySelector("input"),
   restric: /([0-9]{1,}(\.[0-9]{1,}){0,1}[\x\+\-\/\^\%]{1,1}[0-9]{1,}(\.[0-9]{1,}){0,1})$/g,
@@ -89,11 +97,11 @@ let calcu: Tags = {
       opera: string = "",
       flag = true,
       test = true;
-    this.btns.iterator((btn: Node) => {
+    utils1.iteraNodeList(this.btns, (btn: Node) => {
       btn.addEventListener(event, () => {
         test = this.restric.test(this.input.value);
         if (btn.textContent === "=" && test && this.input.value !== " ") {
-          this.input.value.iterator((val: string) => {
+          utils1.iteraStr(this.input.value, (val: string) => {
             if (
               val !== "+" &&
               val !== "-" &&
@@ -112,40 +120,34 @@ let calcu: Tags = {
           });
           switch (opera) {
             case "+":
-              this.input.value = __math__.add(
-                parseFloat(num1),
-                parseFloat(num2)
-              );
+              this.input.value = math1.add(parseFloat(num1), parseFloat(num2));
               break;
             case "-":
-              this.input.value = __math__.subtract(
+              this.input.value = math1.subtract(
                 parseFloat(num1),
                 parseFloat(num2)
               );
               break;
             case "x":
-              this.input.value = __math__.multiply(
+              this.input.value = math1.multiply(
                 parseFloat(num1),
                 parseFloat(num2)
               );
               break;
             case "/":
-              this.input.value = __math__.division(
+              this.input.value = math1.division(
                 parseFloat(num1),
                 parseFloat(num2)
               );
               break;
             case "^":
-              this.input.value = __math__.Potency(
+              this.input.value = math1.Potency(
                 parseFloat(num2),
                 parseFloat(num1)
               );
               break;
             case "%":
-              this.input.value = __math__.Rest(
-                parseFloat(num1),
-                parseFloat(num2)
-              );
+              this.input.value = math1.Rest(parseFloat(num1), parseFloat(num2));
               break;
             default:
               console.log("error de caracter");
@@ -158,17 +160,17 @@ let calcu: Tags = {
           btn.textContent !== "=" &&
           btn.textContent !== "AC" &&
           btn.textContent !== "DE"
-        ) {
+        )
           this.input.value +=
-            btn.textContent !== "PI" ? btn.textContent : __math__.PY;
-        } else if (btn.textContent === "AC") {
-          this.input.value = " ";
-        } else if (btn.textContent === "DE") {
-          this.input.value = this.input.value.convertArr().myPop().convertStr();
-        }
+            btn.textContent !== "PI" ? btn.textContent : math1.PY;
+        else if (btn.textContent === "AC") this.input.value = " ";
+        else if (btn.textContent === "DE")
+          this.input.value = utils1.convertStr(
+            utils1.myPop(utils1.convertArr(this.input.value))
+          );
       });
     });
   },
 };
 
-calcu.event("click");
+tags1.event("click");
