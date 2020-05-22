@@ -1,62 +1,8 @@
-type math = {
-  add: Function;
-  subtract: Function;
-  multiply: Function;
-  Potency: Function;
-  division: Function;
-  Rest: Function;
-  max: Function;
-  min: Function;
-  trunc: Function;
-  PY: number;
-};
+window.addEventListener("load", () => {
+  Load();
+});
 
-type Tags = {
-  btns: NodeList;
-  input: Node;
-  restric: RegExp;
-  event: Function;
-};
-
-type Utils = {
-  iteraStr: Function;
-  iteraNodeList: Function;
-  myPop: Function;
-  convertArr: Function;
-  convertStr: Function;
-};
-
-let utils1: Utils = {
-  iteraStr: function (
-    str: string,
-    func: (str: string, index: number) => void
-  ): void {
-    for (let i: number = 0; i < str.length; i++) func(str[i], i);
-  },
-  iteraNodeList: function (
-    nodeLs: NodeList,
-    func: (node: Node, index: number) => void
-  ): void {
-    for (let i: number = 0; i < nodeLs.length; i++) func(nodeLs[i], i);
-  },
-  myPop: function (arr: Array<any>): Array<any> {
-    let newArr: Array<any> = [];
-    for (let i: number = 0; i < arr.length - 1; i++) newArr.push(arr[i]);
-    return newArr;
-  },
-  convertArr: function (str: String): Array<any> {
-    let arr: Array<any> = [];
-    for (let i: number = 0; i < str.length; i++) arr.push(str[i]);
-    return arr;
-  },
-  convertStr: function (arr: Array<any>): string {
-    let str: string = " ";
-    for (let i: number = 0; i < arr.length; i++) str += arr[i];
-    return str;
-  },
-};
-
-let math1: math = {
+const math1 = {
   add: function (...args: [number, number]) {
     return args[0] + args[1];
   },
@@ -67,110 +13,144 @@ let math1: math = {
     return args[0] * args[1];
   },
   Potency: function (...args: [number, number]) {
-    return Math.pow(args[1], args[0]);
+    return Math.pow(args[0], args[1]);
   },
   division: function (...args: [number, number]) {
     return args[0] / args[1];
   },
-  max: function (...args: [number, number]) {
-    return args[0] > args[1] ? args[0] : args[1];
-  },
-  min: function (...args: [number, number]) {
-    return args[0] < args[1] ? args[0] : args[1];
-  },
-  trunc: function (...args: [number, number, number]) {
-    return this.max(args[0], this.min(args[1], args[2]));
-  },
   Rest: function (...args: [number, number]) {
     return args[0] % args[1];
+  },
+  root: function (...args: [number, number]) {
+    return Math.pow(args[1], 1 / args[0]);
   },
   PY: Math.PI,
 };
 
-let tags1: Tags = {
-  btns: document.querySelectorAll("button"),
-  input: document.querySelector("input"),
-  restric: /([0-9]{1,}(\.[0-9]{1,}){0,1}[\x\+\-\/\^\%]{1,1}[0-9]{1,}(\.[0-9]{1,}){0,1})$/g,
-  event: function (event: string) {
-    let num1: string = "",
-      num2: string = "",
-      opera: string = "",
-      flag = true,
-      test = true;
-    utils1.iteraNodeList(this.btns, (btn: Node) => {
-      btn.addEventListener(event, () => {
-        test = this.restric.test(this.input.value);
-        if (btn.textContent === "=" && test && this.input.value !== " ") {
-          utils1.iteraStr(this.input.value, (val: string) => {
-            if (
-              val !== "+" &&
-              val !== "-" &&
-              val !== "x" &&
-              val !== "/" &&
-              val !== "^" &&
-              val !== "%" &&
-              flag
-            )
-              num1 += val;
-            else {
-              if (!flag) num2 += val;
-              else if (flag) opera = val;
-              flag = false;
-            }
-          });
-          switch (opera) {
-            case "+":
-              this.input.value = math1.add(parseFloat(num1), parseFloat(num2));
-              break;
-            case "-":
-              this.input.value = math1.subtract(
-                parseFloat(num1),
-                parseFloat(num2)
-              );
-              break;
-            case "x":
-              this.input.value = math1.multiply(
-                parseFloat(num1),
-                parseFloat(num2)
-              );
-              break;
-            case "/":
-              this.input.value = math1.division(
-                parseFloat(num1),
-                parseFloat(num2)
-              );
-              break;
-            case "^":
-              this.input.value = math1.Potency(
-                parseFloat(num2),
-                parseFloat(num1)
-              );
-              break;
-            case "%":
-              this.input.value = math1.Rest(parseFloat(num1), parseFloat(num2));
-              break;
-            default:
-              console.log("error de caracter");
-              break;
-          }
-          flag = true;
-          num1 = " ";
-          num2 = " ";
-        } else if (
-          btn.textContent !== "=" &&
-          btn.textContent !== "AC" &&
-          btn.textContent !== "DE"
-        )
-          this.input.value +=
-            btn.textContent !== "PI" ? btn.textContent : math1.PY;
-        else if (btn.textContent === "AC") this.input.value = " ";
-        else if (btn.textContent === "DE")
-          this.input.value = utils1.convertStr(
-            utils1.myPop(utils1.convertArr(this.input.value))
-          );
+const Utils = (function () {
+  // function private
+  // var str = "3+42+33-3"; space(str,'-')  out "3+42+33 - 3";
+  const Space = (Str: String, item: string) => {
+    var newArr: string = "";
+    for (var itera = 0; itera < Str.length; itera++) {
+      if (Str[itera] === item) {
+        newArr += itera === 0 ? Str[itera] : " " + Str[itera] + " ";
+      } else newArr += Str[itera];
+    }
+    return newArr;
+  };
+  // function private
+  // it returs a number in type string
+  // ej num1 "23" num2 "3" sign "+"  out "26"
+  const resultAux = (num1: string, num2: string, sign: string) => {
+    var res: string = "";
+    switch (sign) {
+      case "+":
+        res += math1.add(parseFloat(num1), parseFloat(num2));
+        break;
+      case "-":
+        res += math1.subtract(parseFloat(num1), parseFloat(num2));
+        break;
+      case "/":
+        res += math1.division(parseFloat(num1), parseFloat(num2));
+        break;
+      case "x":
+        res += math1.multiply(parseFloat(num1), parseFloat(num2));
+        break;
+      case "%":
+        res += math1.Rest(parseFloat(num1), parseFloat(num2));
+        break;
+      case "^":
+        res += math1.Potency(parseFloat(num1), parseFloat(num2));
+        break;
+      case "√":
+        res += math1.root(parseFloat(num1), parseFloat(num2));
+        break;
+      default:
+        console.log("el signo no coincide");
+        break;
+    }
+    return res;
+  };
+  return {
+    // space("3+3-23x33/3+1",['-','+','/','x']) out "3 + 3 - 23 x 33 / 3 + 1"
+    space: (Str: string, items: Array<any>) => {
+      for (var i: number = 0; i < items.length; i++) Str = Space(Str, items[i]);
+      return Str;
+    },
+    // to make it work var Str = "3 + 3 - 23 x 33 / 3 + 1";
+    // Result(Str);
+    // out "6 - 23 x 33 / 3 + 1"
+    // out "-17 x 33 / 3 + 1"
+    // out "-561 / 3 + 1"
+    // out "-187 + 1"
+    // out "-186"
+    Result: (Str: string) => {
+      // Str = "3 + 3 - 23 x 33 / 3 + 1"
+      //out ["3","+","3","-","23","x","33","/","3","+","1"]
+      var arr: Array<string> = Str.split(" ");
+      while (arr.length > 1) {
+        var num1: any = arr.shift(),
+          sign: any = arr.shift(),
+          num2: any = arr.shift(),
+          res = resultAux(num1, num2, sign);
+        arr.unshift(res);
+      }
+      return arr[0];
+    },
+    // ej var Nodelist = [document.createElement("div"),document.createElement("span")];
+    // iteraNode(Nodelist,(_Node_,index) => console.log(_Node_,'',index));
+    iteraNode: (
+      nodeL: NodeList,
+      func: (node: Node, index: number) => void
+    ): void => {
+      for (var i: number = 0; i < nodeL.length; i++) func(nodeL[i], i);
+    },
+    // var str = "hello, world";
+    // popStr(str) out "hello, worl";
+    popStr: (str: string) => {
+      var newStr = "";
+      for (var itera = 0; itera < str.length - 1; itera++) newStr += str[itera];
+      return newStr;
+    },
+    disableBtn: (nodeL: NodeList, des: number, available: any) => {
+      var index: number = 0;
+      nodeL.forEach((node) => {
+        if (index > des) node.disabled = available;
+        else node.disabled = !available;
+        index++;
       });
-    });
-  },
-};
+    },
+  };
+})();
 
-tags1.event("click");
+const Load = () => {
+  const tags1 = {
+    btns: document.querySelectorAll("button.available"),
+    input: document.querySelector("input"),
+    controllers: document.querySelectorAll(".control"),
+  };
+  const btnClick = (btn: Node) => {
+    if (
+      btn.textContent !== "=" &&
+      btn.textContent !== "DE" &&
+      btn.textContent !== "AC"
+    )
+      tags1.input.value +=
+        btn.textContent === "PI" ? math1.PY : btn.textContent;
+    else if (btn.textContent === "=")
+      tags1.input.value = Utils.Result(
+        Utils.space(tags1.input.value, ["+", "-", "x", "/", "^", "%", "√"])
+      );
+    else if (btn.textContent === "DE")
+      tags1.input.value = Utils.popStr(tags1.input.value);
+    else if (btn.textContent === "AC") tags1.input.value = "";
+  };
+
+  Utils.iteraNode(tags1.btns, (btn) => {
+    Utils.disableBtn(tags1.btns, -1, false);
+    btn.addEventListener("click", () => {
+      btnClick(btn);
+    });
+  });
+};

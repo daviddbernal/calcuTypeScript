@@ -32,7 +32,13 @@
     </style>
   </head>
   <body>
-    <div id="wrap-buttons">
+    <button class="btn btn-primary control" id="programador">
+      programador
+    </button>
+    <button class="btn btn-primary control" id="estandar">
+      estandar
+    </button>
+    <div id="wrap-buttons" class="calcu-estandar">
       <button class="btn btn-primary">0</button>
       <button class="btn btn-primary">1</button>
       <button class="btn btn-primary">2</button>
@@ -45,7 +51,7 @@
       <button class="btn btn-primary">9</button>
       <button class="btn btn-primary">.</button>
       <br />
-      <button class="btn btn-primary" id="=">=</button>
+      <button class="btn btn-primary">=</button>
       <button class="btn btn-primary">+</button>
       <button class="btn btn-primary">/</button>
       <button class="btn btn-primary">-</button>
@@ -55,8 +61,32 @@
       <button class="btn btn-primary">AC</button>
       <button class="btn btn-primary">DE</button>
       <button class="btn btn-primary">PI</button>
+      <button class="btn btn-primary">√</button>
+    </div>
+    <div id="wrap-buttons" class="calcu-programador">
+      <button class="btn btn-primary" id="BIN">BIN</button>
+      <button class="btn btn-primary" id="HEX">HEX</button>
+      <button class="btn btn-primary" id="OCTA">OCTA</button>
+      <button class="btn btn-primary" id="DEC">DEC</button>
+      <button class="btn btn-primary">0</button>
+      <button class="btn btn-primary">1</button>
+      <button class="btn btn-primary">2</button>
+      <button class="btn btn-primary">3</button>
+      <button class="btn btn-primary">4</button>
+      <button class="btn btn-primary">5</button>
+      <button class="btn btn-primary">6</button>
+      <button class="btn btn-primary">7</button>
+      <button class="btn btn-primary">8</button>
+      <button class="btn btn-primary">9</button>
+      <button class="btn btn-primary">A</button>
+      <button class="btn btn-primary">B</button>
+      <button class="btn btn-primary">C</button>
+      <button class="btn btn-primary">D</button>
+      <button class="btn btn-primary">E</button>
+      <button class="btn btn-primary">F</button>
     </div>
     <input type="text" maxlength="0" />
-    <script src="index.js"></script>
+    <script src="./build/src/index.js"></script>
+    <script src="./build/src/displayCalcu.js"></script>
   </body>
 </html>
